@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHARMM-GROMACS Workflow</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f9f9fc;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .workflow-step {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f8f9ff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .workflow-step h3 {
+            margin-top: 0;
+        }
+
+        .workflow-step code {
+            display: block;
+            margin-top: 10px;
+            padding: 10px;
+            background: #eaf0ff;
+            border-radius: 5px;
+            font-family: "Courier New", monospace;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            background: #2575fc;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background: #6a11cb;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>CHARMM-GROMACS-Insert Molecules Randomly Workflow</h1>
+    </header>
+    <main>
+        {% for step in workflow %}
+        <div class="workflow-step">
+            <h3>Step {{ step.step }}</h3>
+            <p>{{ step.description }}</p>
+            <code>{{ step.command }}</code>
+        </div>
+        {% endfor %}
+        <a href="/" class="back-button">Back to Home</a>
+    </main>
+</body>
+</html>

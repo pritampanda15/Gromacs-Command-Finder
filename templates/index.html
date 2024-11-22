@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GROMACS Command Finder</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9fc;
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* Main Container */
+        main {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form Styles */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        label {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"] {
+            padding: 15px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: #6a11cb;
+            box-shadow: 0 0 5px rgba(106, 17, 203, 0.3);
+        }
+
+        button {
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #2575fc, #6a11cb);
+        }
+
+        /* Results Box */
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f8f9ff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .result p {
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .result code {
+            background: #eaf0ff;
+            color: #2575fc;
+            padding: 5px 8px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+        }
+
+        /* Copy Button */
+        .copy-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #2575fc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+
+        .copy-button:hover {
+            background: #6a11cb;
+        }
+
+        .copied-message {
+            display: none;
+            color: green;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .copied-message.active {
+            display: inline-block;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        /* Workflow Button */
+        .workflow-button {
+            margin-top: 20px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .workflow-button:hover {
+            background: linear-gradient(90deg, #2575fc, #6a11cb);
+        }
+
+        /* Workflow Section */
+        .workflow {
+            margin-top: 40px;
+        }
+
+        .workflow h2 {
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .workflow ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .workflow li {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f8f9ff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .workflow li code {
+            display: block;
+            margin-top: 10px;
+            background: #eaf0ff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+    <script>
+        function copyToClipboard(command) {
+            // Copy the command to the clipboard
+            navigator.clipboard.writeText(command).then(() => {
+                // Show the "Copied" message
+                const message = document.getElementById("copied-message");
+                if (message) {
+                    message.classList.add("active");
+                    setTimeout(() => message.classList.remove("active"), 2000); // Hide the message after 2 seconds
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>GROMACS Command Finder</h1>
+    </header>
+    <main>
+        <form method="POST">
+            <label for="query">What do you want to do?</label>
+            <input type="text" id="query" name="query" placeholder="e.g., How to build topology of protein?" required>
+            <button type="submit">Find Command</button>
+        </form>
+
+        <!-- Display the result dynamically -->
+        {% if result %}
+            <div class="result">
+                <p><strong>Task:</strong> {{ result.task }}</p>
+                <p>
+                    <strong>Command:</strong> 
+                    <code id="command">{{ result.command }}</code>
+                </p>
+                <button class="copy-button" onclick="copyToClipboard('{{ result.command }}')">Copy</button>
+                <span id="copied-message" class="copied-message">Copied to clipboard!</span>
+            </div>
+        {% endif %}
+
+        <!-- Workflow Button -->
+        <a href="/workflow" class="workflow-button">View CHARMM-GROMACS-Insert Molecules Randomly Workflow</a>
+    </main>
+    <footer>
+        <p>&copy; 2024 GROMACS Command Helper by Pritam Kumar Panda.</p>
+    </footer>
+</body>
+</html>
