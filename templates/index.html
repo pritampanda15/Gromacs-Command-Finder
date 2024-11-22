@@ -150,7 +150,7 @@
         }
 
         /* Workflow Button */
-        .workflow-button {
+        .workflow-button, .download-button {
             margin-top: 20px;
             background: linear-gradient(90deg, #6a11cb, #2575fc);
             color: white;
@@ -165,51 +165,17 @@
             display: inline-block;
         }
 
-        .workflow-button:hover {
+        .workflow-button:hover, .download-button:hover {
             background: linear-gradient(90deg, #2575fc, #6a11cb);
-        }
-
-        /* Workflow Section */
-        .workflow {
-            margin-top: 40px;
-        }
-
-        .workflow h2 {
-            font-size: 1.5rem;
-            color: #333;
-        }
-
-        .workflow ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .workflow li {
-            margin-bottom: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background: #f8f9ff;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-        }
-
-        .workflow li code {
-            display: block;
-            margin-top: 10px;
-            background: #eaf0ff;
-            padding: 10px;
-            border-radius: 5px;
         }
     </style>
     <script>
         function copyToClipboard(command) {
-            // Copy the command to the clipboard
             navigator.clipboard.writeText(command).then(() => {
-                // Show the "Copied" message
                 const message = document.getElementById("copied-message");
                 if (message) {
                     message.classList.add("active");
-                    setTimeout(() => message.classList.remove("active"), 2000); // Hide the message after 2 seconds
+                    setTimeout(() => message.classList.remove("active"), 2000);
                 }
             });
         }
@@ -221,26 +187,37 @@
     </header>
     <main>
         <form method="POST">
-            <label for="query">What do you want to do?</label>
+            <label for="query">What do you want to search?</label>
             <input type="text" id="query" name="query" placeholder="e.g., How to build topology of protein?" required>
             <button type="submit">Find Command</button>
         </form>
 
-        <!-- Display the result dynamically -->
         {% if result %}
-            <div class="result">
-                <p><strong>Task:</strong> {{ result.task }}</p>
-                <p>
-                    <strong>Command:</strong> 
-                    <code id="command">{{ result.command }}</code>
-                </p>
-                <button class="copy-button" onclick="copyToClipboard('{{ result.command }}')">Copy</button>
-                <span id="copied-message" class="copied-message">Copied to clipboard!</span>
-            </div>
-        {% endif %}
+    {% if result.matches %}
+        <div class="result">
+            <h2>Matching Commands:</h2>
+            <ul>
+                {% for task, command in result.matches.items() %}
+                    <li>
+                        <p><strong>Task:</strong> {{ task }}</p>
+                        <p><strong>Command:</strong> <code>{{ command }}</code></p>
+                        <button class="copy-button" onclick="copyToClipboard('{{ command }}')">Copy</button>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% elif result.error %}
+        <p>{{ result.error }}</p>
+    {% endif %}
+{% endif %}
 
         <!-- Workflow Button -->
         <a href="/workflow" class="workflow-button">View CHARMM-GROMACS-Insert Molecules Randomly Workflow</a>
+
+        <!-- Download Button -->
+        <a href="/download_script" class="download-button">Download Shell Script for CHARMM-GUI generated files</a>
+        <a href="/download_protein_ligand_script" class="download-button">Download Protein-Ligand Workflow Script</a>
+        <a href="/download_protein_in_water_script" class="download-button">Download Protein-In-Water Workflow Script</a>
     </main>
     <footer>
         <p>&copy; 2024 GROMACS Command Helper by Pritam Kumar Panda.</p>
