@@ -39,6 +39,25 @@
             border-radius: 10px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
+        .visit-app-button {
+            margin-top: 20px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+        }
+        }
+
+        .visit-app-button:hover {
+            background: linear-gradient(90deg, #2575fc, #6a11cb);
+        }
 
         /* Form Styles */
         form {
@@ -218,6 +237,11 @@
         <a href="/download_script" class="download-button">Download Shell Script for CHARMM-GUI generated files</a>
         <a href="/download_protein_ligand_script" class="download-button">Download Protein-Ligand Workflow Script</a>
         <a href="/download_protein_in_water_script" class="download-button">Download Protein-In-Water Workflow Script</a>
+        
+        <!-- Embedded App Section -->
+        <div class="embedded-app">
+            <a href="https://gromacs-stepwizard-7e3791398062.herokuapp.com" target="_blank" class="visit-app-button">Visit GROMACS Step Wizard</a>
+        </div>
     </main>
     <footer>
         <p>&copy; 2024 GROMACS Command Helper by Pritam Kumar Panda.</p>
