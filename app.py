@@ -19,7 +19,7 @@ gromacs_commands = {
     "Analyze secondary structure": "gmx do_dssp -s reference.tpr -f trajectory.xtc -o secondary.xvg",
     "Cluster analysis": "gmx cluster -s reference.tpr -f trajectory.xtc -o clusters.xvg",
     "Generate solvent box": "gmx editconf -f processed.pdb -o box.pdb -bt cubic -d 1.0",
-    "Add ions": "gmx genion -s ions.tpr -o solvated_ions.gro -p topol.top -pname NA -nname CL -neutral",
+    "Add neutral ions": "gmx genion -s ions.tpr -o solvated_ions.gro -p topol.top -pname NA -nname CL -neutral",
     "Equilibrate system (NVT)": "gmx mdrun -v -deffnm nvt",
     "Equilibrate system (NPT)": "gmx mdrun -v -deffnm npt",
     "Convert trajectory format": "gmx trjconv -f trajectory.xtc -o output.gro",
