@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, send_file, redirect, url_for, session
 from fuzzywuzzy import process
+from difflib import get_close_matches
+from rapidfuzz import process
 
 app = Flask(__name__)
 
@@ -661,7 +663,15 @@ charmm_workflow = [
 def home():
     if request.method == "POST":
         user_query = request.form.get("query").lower()
+        
+        # Exact matches
         matches = {key: value for key, value in gromacs_commands.items() if user_query in key.lower()}
+        
+        # Fuzzy matching for mistyped queries
+        if not matches:
+            close_matches = get_close_matches(user_query, gromacs_commands.keys(), n=5, cutoff=0.6)
+            if close_matches:
+                matches = {key: gromacs_commands[key] for key in close_matches}
         
         # Store matches or error in the session (or temporary flash messages)
         if matches:
@@ -752,7 +762,7 @@ end
 @app.route("/download_protein_ligand_script", methods=["GET"])
 def download_protein_ligand_script():
     # Protein-Ligand Workflow Script Content
-    script_content = """
+    script_content = r"""
 #!/bin/bash
 
 # Step 1: Extract ligand coordinates
