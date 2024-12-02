@@ -2,8 +2,42 @@ from flask import Flask, render_template, request, send_file, redirect, url_for,
 from fuzzywuzzy import process
 from difflib import get_close_matches
 from rapidfuzz import process
+import requests
+import os 
+import urllib3
+from dotenv import load_dotenv
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Retrieve the API key
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+if not GEMINI_API_KEY:
+    raise ValueError("GEMINI_API_KEY is not set. Please add it to the .env file.")
+
 
 app = Flask(__name__)
+
+
+def query_gemini(prompt):
+    url = "https://api.gemini-ai.example.com/v1/query"  # Replace with actual API endpoint
+    headers = {
+        "Authorization": f"Bearer {GEMINI_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "prompt": prompt,
+        "max_tokens": 100,  # Customize as needed
+        "temperature": 0.7  # Customize as needed
+    }
+    response = requests.post(url, json=payload, headers=headers)
+    if response.status_code == 200:
+        return response.json()  # Adjust this depending on the API response format
+    else:
+        return {"error": f"API request failed with status code {response.status_code}"}
 
 # GROMACS Command Database
 gromacs_commands = {
@@ -673,11 +707,19 @@ def home():
             if close_matches:
                 matches = {key: gromacs_commands[key] for key in close_matches}
         
-        # Store matches or error in the session (or temporary flash messages)
-        if matches:
-            result = {"matches": matches}
-        else:
-            result = {"error": "No suitable matches found. Please refine your query."}
+        # If no matches, query Gemini AI
+        if not matches:
+            gemini_response = query_gemini(user_query)
+            
+            # Check for errors in Gemini response
+            if "error" in gemini_response:
+                result = {"error": gemini_response["error"]}
+            else:
+                # Store the Gemini AI response
+                matches = {"Gemini AI Suggestion": gemini_response.get("data", "No response data")}
+        
+        # Prepare result to render
+        result = {"matches": matches} if matches else {"error": "No suitable matches found. Please refine your query."}
         
         return render_template("index.html", result=result, commands=gromacs_commands)
     
