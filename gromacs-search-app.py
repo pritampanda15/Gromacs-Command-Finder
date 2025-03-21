@@ -768,6 +768,6 @@ for their simulations.
 
 # Add acknowledgements
 st.sidebar.markdown("---")
-st.sidebar.markdown("Created by [Your Name]")
+st.sidebar.markdown("Created by Pritam Kumar Panda @Stanford University")
 st.sidebar.markdown("Based on GROMACS 2024.2")
 st.sidebar.markdown("[GitHub Repository](https://github.com/pritampanda15)")
