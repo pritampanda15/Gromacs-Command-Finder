@@ -1,5 +1,4 @@
-### Access to the App: [https://gromacs-command-finder-a9630d013893.herokuapp.com/](https://gromacs-command-finder-pwnaf8a8qgxleesb7m4d5h.streamlit.app/)
-
+### Access to the App: https://gromacs-command-finder-pwnaf8a8qgxleesb7m4d5h.streamlit.app/
 
 
 ### **Categories for GROMACS Commands**
